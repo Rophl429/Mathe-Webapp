@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mathe-Abenteuer V4</title>
+<style>
+*{box-sizing:border-box} body{margin:0;font-family:Arial,sans-serif;background:#f3f6fb;color:#20242c}
+main{max-width:950px;margin:auto;padding:24px}.card{background:white;border-radius:20px;padding:25px;box-shadow:0 6px 22px #0002}
+h1{text-align:center}.sub{text-align:center;color:#687386}.hidden{display:none}
+.themes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}
+button,select,input{font:inherit;border-radius:12px;padding:12px;border:1px solid #cbd3df}
+button{cursor:pointer;background:white}.theme{font-size:20px;font-weight:bold;min-height:130px}.theme b{display:block;font-size:52px}
+.settings{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}.top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.pill{background:#eef2f7;padding:9px 14px;border-radius:999px;font-weight:bold}
+.progress{height:12px;background:#e6ebf2;border-radius:20px;margin:14px 0 18px;overflow:hidden}.bar{height:100%;background:#596273;width:0;transition:.4s}
+.reward{border:2px solid #e0e5ed;border-radius:18px;padding:16px;min-height:175px;margin-bottom:22px}
+.rewardTitle{text-align:center;font-weight:bold;margin-bottom:14px}
+.track{height:105px;position:relative}.road{position:absolute;left:5%;right:5%;top:55px;height:8px;background:#b99c6b;border-radius:9px}
+.dino{position:absolute;top:7px;font-size:44px;transition:left .5s}.chest{position:absolute;right:2%;top:7px;font-size:43px}
+.space{height:110px;background:#20283c;border-radius:14px;position:relative;overflow:hidden}
+.spaceLine{position:absolute;left:7%;right:7%;top:57px;border-top:2px dashed #aab4cc}.rocket{position:absolute;top:34px;font-size:38px;transition:left .5s}
+.planets{position:absolute;left:20%;right:5%;top:35px;display:flex;justify-content:space-between;font-size:34px}
+.land{height:125px;background:linear-gradient(#dcefff 0 62%,#dce8c5 62%);border-radius:14px;display:flex;align-items:end;justify-content:center}
+.house{width:220px;height:115px;position:relative}.block{position:absolute;width:36px;height:36px;background:#b78355;border:2px solid #0002;display:none}.block.on{display:block}.roof{background:#855b3e}.window{background:#bce5ff}.door{background:#6f4d35}
+.task{text-align:center}.world{font-size:27px;font-weight:bold}.story{font-size:22px;line-height:1.5;max-width:720px;margin:18px auto}
+.icons{font-size:31px;min-height:40px}.eq{font-size:35px;font-weight:bold;margin:15px}.answer{width:125px;text-align:center;font-size:27px}
+.primary{background:#252b36;color:white;border:0}.feedback{min-height:32px;font-size:19px;font-weight:bold;margin:15px}
+.finish{text-align:center}.finishIcon{font-size:60px}
+@media(max-width:680px){.themes{grid-template-columns:1fr}.story{font-size:19px}}
+</style><link rel="stylesheet" href="belohnungen.css"><link rel="stylesheet" href="statistik.css"></head>
+<body><button id="statsButton" class="settings-gear stats-button" onclick="statistics('open')" aria-label="Lokale Statistik öffnen" title="Lokale Statistik">▥</button><button id="settingsGear" class="settings-gear" onclick="openSettings()" aria-label="Einstellungen öffnen" title="Einstellungen" aria-haspopup="dialog">⚙</button><main>
+<h1>🧮 Mathe-Abenteuer</h1><p class="sub">Addition & Subtraktion – Prototyp für die Abschlussarbeit</p>
+
+<section id="start" class="card">
+<section id="amountConflict" class="card hidden" aria-labelledby="amountConflictTitle"><h2 id="amountConflictTitle">Aufgabeneinstellungen geändert</h2><p id="amountConflictText"></p><div class="finish-actions"><button id="restartWithAmount" class="primary" onclick="resolveAmountChange(true)">Mit neuen Einstellungen starten</button><button id="continueWithAmount" onclick="resolveAmountChange(false)">Gespeicherte Etappe fortsetzen</button><button onclick="home()">Abbrechen</button></div></section>
+<div id="resumePanel" class="card hidden"><h2>Dein Abenteuer wartet</h2><p id="resumeText"></p></div>
+
+<p id="settingsSummary" class="sub"></p>
+<h2 style="text-align:center">Wähle deine Themenwelt</h2>
+<p style="text-align:center">Jede richtige Aufgabe bringt dein Abenteuer ein Stück weiter.</p>
+<div class="themes">
+<button class="theme" onclick="start('dino')"><b>🦖</b>Dinosaurier<small id="dinoProgress"></small></button>
+<button class="theme" onclick="start('space')"><b>🚀</b>Weltraum<small id="spaceProgress"></small></button>
+<button class="theme" onclick="start('mine')"><b>⛏️</b>Minecraft<small id="mineProgress"></small></button>
+</div>
+</section>
+<p id="storageNotice" role="status" class="sub"></p>
+
+<section id="game" class="card hidden">
+<div class="top"><button onclick="home()">← Zurück</button><span class="pill">Aufgabe <span id="n">1</span>/<span id="tot">10</span></span><span class="pill">⭐ Richtig: <span id="score">0</span></span></div>
+<div class="progress"><div id="bar" class="bar"></div></div>
+<div id="reward" class="reward"></div>
+<div class="task"><div class="problem"><div id="world" class="world"></div><p id="stageName" class="stage-name"></p><span id="taskTypeLabel" class="task-type-label"></span><div id="story" class="story"></div><div id="strategy" class="strategy hidden"><p id="originEq"></p><p id="splitPlan"></p><p id="solvedSteps"></p><p id="stepLabel" aria-live="polite"></p></div><div id="eq" class="eq"></div><input id="ans" aria-label="Deine Antwort" class="answer" type="text" inputmode="none" readonly maxlength="4" placeholder="?"><div id="fb" class="feedback" role="status" aria-live="polite"></div></div>
+<div id="keypad" class="keypad" role="group" aria-label="Tastenfeld für deine Antwort">
+<button onclick="enterKey('1')">1</button><button onclick="enterKey('2')">2</button><button onclick="enterKey('3')">3</button>
+<button onclick="enterKey('4')">4</button><button onclick="enterKey('5')">5</button><button onclick="enterKey('6')">6</button>
+<button onclick="enterKey('7')">7</button><button onclick="enterKey('8')">8</button><button onclick="enterKey('9')">9</button>
+<button class="key-action" onclick="enterKey('clear')" aria-label="Antwort leeren">Leeren</button><button onclick="enterKey('0')">0</button><button class="key-action" onclick="enterKey('erase')" aria-label="Letzte Ziffer löschen">⌫</button>
+<button id="checkButton" class="primary" onclick="check()">Prüfen ✓</button></div></div>
+</section>
+
+<section id="finish" class="card finish hidden"><div id="finIcon" class="finishIcon"></div><h2 id="finTitle"></h2><p id="finText"></p><p id="nextStageText"></p><details class="next-settings"><summary>Einstellung für die nächste Etappe</summary><label>Aufgaben <input id="nextAmount" type="number" min="1" max="50" value="10"></label><p>Weitere Einstellungen findest du oben rechts beim Zahnrad.</p></details><div class="finish-actions"><button id="nextStageButton" class="primary" onclick="startNextStage()">Nächste Etappe →</button><button onclick="home()">Themenwahl</button></div></section>
+<section id="stats" class="card hidden" aria-labelledby="statsTitle">
+<div class="stats-header"><div><h2 id="statsTitle" tabindex="-1">Statistik</h2><p id="statsStamp"></p></div><button onclick="statistics('close')" aria-label="Statistik schliessen">✕</button></div>
+<p id="statsWarning" class="stats-warning" role="status"></p>
+<nav class="stats-nav" aria-label="Statistikbereiche"><button data-stat-view="overview" aria-pressed="true" onclick="statistics('tab','overview')">Gesamtübersicht</button><button data-stat-view="worlds" aria-pressed="false" onclick="statistics('tab','worlds')">Themenwelten</button><button data-stat-view="types" aria-pressed="false" onclick="statistics('tab','types')">Aufgabentypen</button><button data-stat-view="ranges" aria-pressed="false" onclick="statistics('tab','ranges')">Zahlenräume</button></nav>
+<h3 id="statsViewTitle"></h3>
+<div id="statsRangeFilter" class="stats-range-filter hidden" role="group" aria-label="Aufgabentypen nach Zahlenraum filtern"><button data-stat-range="all" aria-pressed="true" onclick="statistics('filterRange','all')">Alle</button><button data-stat-range="20" aria-pressed="false" onclick="statistics('filterRange','20')">bis 20</button><button data-stat-range="100" aria-pressed="false" onclick="statistics('filterRange','100')">bis 100</button><button data-stat-range="1000" aria-pressed="false" onclick="statistics('filterRange','1000')">bis 1000</button></div>
+<div id="statsContent"></div>
+<div class="stats-notes"><p>Bearbeitet = mindestens eine geprüfte Antwort. Beim ersten Versuch richtig = vollständig ohne Fehlversuch gelöst. Zerlegungen zählen als eine Aufgabe.</p><p>Versuche = falsche Eingaben + ein korrekter Lösungsdurchlauf (falls begonnen). Korrekte Pflichtschritte zählen zusammen einmal. Ø Versuche: alle bearbeiteten Aufgaben; Ø Zeit: nur gelöste. Summen helfen beim Zusammenführen.</p><p>Fortsetzen zählt keine neue Runde. Alte Runden ohne Messdaten werden nicht rückwirkend erfasst. Nach dem Zurücksetzen beginnt die Erfassung mit neuen Runden.</p><p>Nur dieser Browser. Bitte Screenshots sichern; gelöschte Browserdaten können nicht wiederhergestellt werden.</p></div>
+<button class="stats-reset" onclick="statistics('reset')">Statistikdaten zurücksetzen</button>
+</section>
+</main><dialog id="teacher" aria-labelledby="settingsTitle"><div class="settings-header"><h2 id="settingsTitle">Einstellungen</h2><button onclick="closeSettings()" aria-label="Einstellungen schliessen">✕</button></div><p>Für die Betreuungsperson · Das Abenteuer pausiert, solange dieses Fenster offen ist.</p>
+<div class="settings" style="margin:20px 0">
+<div class="task-type-choice"><label for="taskType">Was möchtest du üben?</label><select id="taskType" onchange="showTaskTypeHelp()" aria-describedby="taskTypeHelp"><option value="tens">Zehner + Zahl</option><option value="ones">Einer ergänzen</option><option value="split">Zahlen zerlegen</option></select><p id="taskTypeHelp"></p></div>
+<label>Zahlenraum <select id="range"><option value="20">bis 20</option><option value="100" selected>bis 100</option><option value="1000">bis 1000</option></select></label>
+<label>Rechenart <select id="operation"><option value="mixed">Addition und Subtraktion</option><option value="plus">Addition</option><option value="minus">Subtraktion</option></select></label>
+<label>Aufgaben <input id="amount" type="number" min="1" max="50" value="10" style="width:90px"></label>
+</div><p>Ganze Zahlen, keine negativen Ergebnisse. Zehnerübergänge sind möglich. Änderungen gelten für neu gestartete Etappen. Die laufende Aufgabe bleibt erhalten.</p>
+<button class="primary" onclick="saveSettingsDialog()">Einstellungen übernehmen</button>
+<div class="reset-controls"><label>Reise <select id="resetTheme"><option value="dino">Dinosaurier</option><option value="space">Weltraum</option><option value="mine">Minecraft</option></select></label><button onclick="restartStage()">Etappe neu starten</button><button onclick="resetJourney()">Ganze Reise zurücksetzen</button></div>
+<p>Ein gemeinsamer Spielstand auf diesem iPad. Jede Themenwelt wird getrennt gespeichert.</p><button class="settings-cancel" onclick="closeSettings()">Zurück ohne Änderungen</button></dialog>
+<script src="themen.js"></script><script src="aufgaben.js"></script><script src="etappen.js"></script><script src="belohnungen.js"></script><script src="statistik.js"></script><script src="app.js"></script></body></html>
+
+

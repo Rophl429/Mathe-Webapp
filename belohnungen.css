@@ -1,0 +1,53 @@
+.reward{padding:0;overflow:hidden;border-color:#d9e6de;margin-bottom:16px}
+.reward-heading{display:flex;justify-content:space-between;gap:12px;padding:12px 18px;font-size:17px;font-weight:bold;color:#34524a;background:#f3f8f2}
+.reward-count{white-space:nowrap;font-variant-numeric:tabular-nums}
+.reward-scene svg{display:block;width:100%;height:auto;max-height:245px}
+.reward-scene{overflow:hidden;position:relative;top:auto;font-size:16px}.reward-scene.dino{background:#e7f3dd}.reward-scene.space{height:auto;border-radius:0;background:#172841}.reward-scene.mine{background:#dfeff0}
+.reward-caption{padding:9px 12px;font-size:15px;line-height:1.4;text-align:center;color:#40584e;background:#f3f8f2;min-height:39px}
+.leg{stroke:#327154;stroke-width:11;stroke-linecap:round;fill:none;transform-box:fill-box;transform-origin:top center}
+.moving .leg-one{animation:step .22s ease-in-out alternate 5}.moving .leg-two{animation:step .22s ease-in-out alternate-reverse 5}
+.moving .dino-body{animation:bob .22s ease-in-out alternate 5}
+.flame{opacity:0}.moving .flame{animation:fire .12s alternate 9;transform-origin:-30px 0}
+.lid{transition:transform .5s;transform-origin:-25px -7px}.complete .lid{transform:rotate(-35deg)}
+.treasure-spark{opacity:0}.complete .treasure-spark{opacity:1}
+.planet.reached{filter:drop-shadow(0 0 7px #c8eaff)}
+.house-piece{visibility:hidden}.house-piece.placed{visibility:visible}
+.reward-scene.mine.end-stage{background:#20263d}
+.boss-hud{display:grid;grid-template-columns:1fr auto;gap:7px 16px;padding:12px 22px 4px;color:#e5d8f7;font-size:15px;font-weight:bold;letter-spacing:1px}
+.boss-percent{font-variant-numeric:tabular-nums;letter-spacing:0}
+.boss-health{grid-column:1/-1;height:15px;background:#131323;border:2px solid #9d7fbd;border-radius:3px;overflow:hidden}
+.boss-health-fill{width:100%;height:100%;background:linear-gradient(#d5a5ec,#9566b6);box-shadow:inset 0 2px #ffffff35}
+.end-sword{transform-origin:0 0}
+.portal-active .end-star{animation:end-starlight 5s ease-in-out infinite alternate}
+@keyframes end-starlight{from{opacity:.35;transform:translateY(2px)}to{opacity:.95;transform:translateY(-3px)}}
+button{min-height:48px}button:disabled{opacity:.6;cursor:default}button:focus-visible,summary:focus-visible{outline:3px solid #337c92;outline-offset:4px}
+.finishIcon .reward{font-size:16px;text-align:left}.finishIcon{font-size:60px}
+@keyframes step{from{transform:rotate(-24deg)}to{transform:rotate(24deg)}}
+@keyframes bob{from{transform:translateY(0)}to{transform:translateY(-3px)}}
+@keyframes fire{from{opacity:1;transform:scaleX(.7)}to{opacity:1;transform:scaleX(1.15)}}
+@media(max-width:680px){main{padding:12px}.card{padding:16px}.reward-heading{font-size:15px;padding:10px}.reward-caption{font-size:13px}.story{margin:12px auto}.icons{display:none}}
+@media(prefers-reduced-motion:reduce){.reward *{animation:none!important;transition:none!important}}
+.theme small{display:block;font-size:14px;line-height:1.4;font-weight:normal;margin-top:12px;color:#456052}
+.reset-controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;padding-top:18px;border-top:1px solid #d8e2dc}
+.task{display:grid;grid-template-columns:minmax(0,1fr) 235px;gap:22px;align-items:center}
+.task-type-choice{padding:16px;background:#eef5ec;border:1px solid #c7d9c7;border-radius:14px}.task-type-choice label{font-size:20px;font-weight:bold;margin-bottom:10px}.task-type-choice select{width:100%;font-size:20px;background:white}.task-type-choice p{margin-bottom:0}
+.task-type-label{display:inline-block;padding:5px 12px;border-radius:20px;background:#edf3e6;color:#3c654c;font-size:15px}
+#splitPlan{white-space:pre-line}
+.strategy-mode .reward-scene svg{max-height:160px}.strategy-mode .reward{margin-bottom:12px}
+.strategy{margin:12px 0;padding:12px;background:#f1f6ed;border-radius:14px;border:1px solid #d5e1cb;font-size:18px}.strategy p{margin:6px 0}#originEq{font-weight:bold;font-size:21px}#solvedSteps{white-space:pre-line;color:#446855;font-size:17px}#stepLabel{font-weight:bold}#splitPlan{color:#53624e}
+.world{font-size:21px}.stage-name{margin:6px 0;color:#537360;font-size:16px}
+.story{font-size:21px;margin:12px auto;line-height:1.45}.eq{margin:12px 0}.feedback{font-size:17px;margin:12px 0;min-height:48px}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-self:center}
+.keypad button{font-size:26px;min-height:56px;padding:8px;background:#f0f5f1;border:1px solid #c7d7ce;touch-action:manipulation}
+.keypad .key-action{font-size:15px}.keypad #checkButton{grid-column:1/-1;font-size:21px;background:#275e4f;color:white;min-height:56px}
+.keypad button:active:not(:disabled){background:#d7e8dc;transform:translateY(1px)}
+.answer{background:#f7faf6;border:2px solid #87ab94;opacity:1;color:#243c31}
+.next-settings{margin:16px auto;max-width:460px;font-size:16px}.next-settings input{width:100px;margin:12px}.next-settings summary{cursor:pointer;padding:12px}
+.finish-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.settings-gear{position:fixed;right:max(16px,env(safe-area-inset-right));top:max(12px,env(safe-area-inset-top));z-index:10;width:52px;height:52px;padding:0;font-size:32px;background:#fff;color:#275e4f;box-shadow:0 3px 16px #203b3320;border-color:#c8d9cf}
+main>h1{padding:0 48px}
+dialog#teacher{width:min(620px,calc(100% - 28px));max-height:85dvh;overflow:auto;border:1px solid #cbddd0;border-radius:22px;padding:24px;color:#243c31;box-shadow:0 20px 80px #11282055}
+dialog::backdrop{background:#142e3c88}.settings-header{display:flex;justify-content:space-between;align-items:center;gap:16px}.settings-header h2{margin:0}.settings-header button{font-size:22px}
+dialog .settings{display:grid;grid-template-columns:1fr;gap:16px}dialog label{display:flex;justify-content:space-between;align-items:center;gap:12px}dialog p{font-size:15px;line-height:1.5}dialog .reset-controls{display:grid;grid-template-columns:1fr}.settings-cancel{margin-top:12px;width:100%}
+@media(max-width:500px){dialog#teacher{padding:18px}dialog label{flex-direction:column;align-items:stretch;gap:6px}dialog select{width:100%;min-width:0}main>h1{font-size:25px;padding:0 36px}.settings-gear{width:46px;height:46px;font-size:29px}}
+@media(max-width:600px){.task{grid-template-columns:1fr;gap:4px}.keypad{width:min(100%,300px);margin:0 auto}.story{font-size:18px}.world{font-size:20px}.feedback{min-height:24px}.keypad button{min-height:50px}}
